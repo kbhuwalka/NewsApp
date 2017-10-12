@@ -6,20 +6,29 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<NewsItem[]> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<NewsItem[]>, NewsAdapter.AdapterCallbacks {
 
     private NewsAdapter mAdapter;
+
+    private TextView emptyView;
+    private RecyclerView newsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAdapter = new NewsAdapter();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.newsList);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        newsList = (RecyclerView) findViewById(R.id.newsList);
+        emptyView = (TextView) findViewById(R.id.empty_view);
+
+        showEmpty();
+
+        mAdapter = new NewsAdapter(this);
+        newsList.setAdapter(mAdapter);
+        newsList.setLayoutManager(new LinearLayoutManager(this));
 
         getSupportLoaderManager().initLoader(0, null, this).forceLoad();
 
@@ -38,5 +47,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<NewsItem[]> loader) {
         mAdapter.swapData(null);
+    }
+
+    @Override
+    public void showList() {
+        emptyView.setVisibility(View.GONE);
+        newsList.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+        newsList.setVisibility(View.VISIBLE);
     }
 }

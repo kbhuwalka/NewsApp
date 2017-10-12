@@ -15,6 +15,12 @@ import android.widget.TextView;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
+    public AdapterCallbacks mCallbacks;
+
+    NewsAdapter(AdapterCallbacks callbacks){
+        mCallbacks = callbacks;
+    }
+
     private NewsItem[] mData;
 
     @Override
@@ -50,6 +56,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     public void swapData(NewsItem[] data) {
+        if (data == null || data.length == 0)
+            mCallbacks.showEmpty();
+        else
+            mCallbacks.showList();
         mData = data;
         notifyDataSetChanged();
     }
@@ -70,5 +80,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             date = view.findViewById(R.id.date);
             section = view.findViewById(R.id.section);
         }
+    }
+
+    public interface AdapterCallbacks{
+        void showList();
+        void showEmpty();
     }
 }

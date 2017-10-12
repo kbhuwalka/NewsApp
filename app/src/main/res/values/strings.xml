@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">News App</string>
+    <string name="no_data_available">There are no news items to show.</string>
 </resources>

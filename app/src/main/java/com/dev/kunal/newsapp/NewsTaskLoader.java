@@ -51,9 +51,11 @@ public class NewsTaskLoader extends AsyncTaskLoader<NewsItem[]>{
 
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
+        connection.setReadTimeout(10000);
+        connection.setConnectTimeout(15000);
         connection.connect();
 
-        if(connection.getResponseCode() == 200){
+        if(connection.getResponseCode() == HttpURLConnection.HTTP_OK){
             inStream = connection.getInputStream();
             jsonResponse = readFromStream(inStream);
         }
